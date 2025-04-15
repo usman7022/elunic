@@ -1,0 +1,76 @@
+<div class="container">
+  <h1>elunic Developer Assessment</h1>
+
+  <!-- Basic API Functionality Demo -->
+  <p-card header="Basic API Functionality" styleClass="card-primary">
+    <div class="card-content">
+      <p-messages styleClass="mb-4">
+        <ng-template pTemplate>
+          <div class="flex align-items-center">
+            <span>{{ apiMessage }}</span>
+          </div>
+        </ng-template>
+      </p-messages>
+
+      <p-listbox [options]="apiItems" [style]="{'width':'100%'}" styleClass="mt-3"></p-listbox>
+    </div>
+  </p-card>
+
+  <!-- Message Form -->
+  <p-card header="Submit a New Message" styleClass="card-secondary">
+    <div class="grid p-fluid">
+      <div class="col-12 md:col-6">
+        <div class="form-group">
+          <span class="p-float-label">
+            <input id="name" type="text" pInputText [(ngModel)]="newMessage.name" class="p-inputtext">
+            <label for="name">Your Name</label>
+          </span>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-group">
+          <span class="p-float-label">
+            <textarea id="message" rows="5" pInputTextarea [(ngModel)]="newMessage.message" class="p-inputtextarea"></textarea>
+            <label for="message">Your Message</label>
+          </span>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="flex justify-content-start gap-3">
+          <button pButton type="button" label="Submit Message" (click)="submitMessage()" 
+                  class="p-button-raised" [disabled]="!newMessage.name || !newMessage.message"></button>
+          <button pButton type="button" label="Create Test Data" (click)="createTestData()" 
+                  class="p-button-raised p-button-secondary"></button>
+        </div>
+      </div>
+    </div>
+  </p-card>
+
+  <!-- Message List -->
+  <p-card header="User Messages" styleClass="card-tertiary">
+    <div *ngIf="messages.length === 0" class="empty-message">
+      <i class="pi pi-inbox"></i>
+      <div>No messages yet. Be the first to leave a message!</div>
+    </div>
+    
+    <div *ngIf="messages.length > 0" class="message-container">
+      <div *ngFor="let msg of messages" class="message-card mb-3 p-3 shadow-1 ">
+        <div class="message-header flex justify-content-between align-items-center mb-2">
+          <strong><i class="pi pi-user mr-2"></i>{{ msg.name }}</strong>
+          <span class="text-sm text-color-secondary ml-3 "><i class="pi pi-calendar mr-1"></i>{{ msg.createdAt | date:'medium' }}</span>
+        </div>
+        <div class="message-body mt-2 p-3 border-left-2 border-primary">
+          {{ msg.message }}
+        </div>
+      </div>
+
+      <p-paginator *ngIf="totalRecords > 0" 
+                [rows]="rows" 
+                [totalRecords]="totalRecords" 
+                [first]="currentPage * rows" 
+                (onPageChange)="onPageChange($event)"
+                styleClass="mt-4"></p-paginator>
+    </div>
+  </p-card>
+</div>
+<router-outlet></router-outlet>
